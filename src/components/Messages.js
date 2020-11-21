@@ -2,7 +2,8 @@ import React from 'react'
 
 class Messages extends React.Component {
     state = {
-        messages: []
+        messages: [],
+        servers: []
     };
 
 
@@ -10,30 +11,46 @@ class Messages extends React.Component {
         const messagesResponse = await fetch(`http://localhost:4000/messages/`);
         const messagsJson = await messagesResponse.json();
         this.setState({ messages: messagsJson }); 
+
+        const serversResponse = await fetch(`http://localhost:4000/servers/`);
+        const serversJson = await serversResponse.json();
+        this.setState({ servers: serversJson }); 
     }
     
     render() {
         return (
         <div>
             {this.state.messages.length > 0 &&
-                <table className="table">
-                <thead>
-                    <tr>
-                    <th scope="col">Server</th>
-                    <th scope="col">Message</th>
-                    </tr>
-                </thead>
+                <div>
+                    <div>
+                        {this.state.servers.length > 0 &&
+                            <select>
+                                {this.state.servers.map((server) => (
+                                    <option key={server.id}>{server.server}</option>
+                                ))}
+                            </select>
+                        }
+                    </div>
 
-                <tbody>
-                    {this.state.messages.map((message) => (
-                        <tr key={message.id}>
-                            <td>{message.server.server}</td>
-                            <td>{message.message}</td>
+                    <table className="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Server</th>
+                        <th scope="col">Message</th>
                         </tr>
-                    ))}
-                 </tbody>
+                    </thead>
 
-                </table>
+                    <tbody>
+                        {this.state.messages.map((message) => (
+                            <tr key={message.id}>
+                                <td>{message.server.server}</td>
+                                <td>{message.message}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+
+                    </table>
+                </div>
             }
 
             {this.state.messages.length == 0 &&
