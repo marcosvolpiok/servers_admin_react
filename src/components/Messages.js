@@ -23,13 +23,11 @@ class Messages extends React.Component {
             {this.state.messages.length > 0 &&
                 <div>
                     <div>
-                        {this.state.servers.length > 0 &&
-                            <select>
-                                {this.state.servers.map((server) => (
-                                    <option key={server.id}>{server.server}</option>
-                                ))}
-                            </select>
-                        }
+                        <select>
+                            {this.state.servers.map((server) => (
+                                <option key={server.id}>{server.server}</option>
+                            ))}
+                        </select>
                     </div>
 
                     <table className="table">
