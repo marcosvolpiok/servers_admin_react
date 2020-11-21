@@ -6,6 +6,22 @@ class Messages extends React.Component {
         servers: []
     };
 
+    constructor(props) {
+        super(props);
+
+        this.handleSelectChange = this.handleSelectChange.bind(this);
+    }
+
+    async handleSelectChange(event) {
+        const target = event.target;
+        const value = target.value;
+        console.log('value', value);
+
+        const messagesResponse = await fetch(`http://localhost:4000/messagesByServer/${value}`);
+        const messagsJson = await messagesResponse.json();
+        this.setState({ messages: messagsJson }); 
+    }
+
 
     async componentDidMount() {
         const messagesResponse = await fetch(`http://localhost:4000/messages/`);
@@ -20,16 +36,18 @@ class Messages extends React.Component {
     render() {
         return (
         <div>
+            {this.state.servers.length > 0 &&
+                <div>
+                    <select onChange={this.handleSelectChange}>
+                        {this.state.servers.map((server) => (
+                            <option key={server.id} value={server.id}>{server.server}</option>
+                        ))}
+                    </select>
+                </div>
+            }  
+
             {this.state.messages.length > 0 &&
                 <div>
-                    <div>
-                        <select>
-                            {this.state.servers.map((server) => (
-                                <option key={server.id}>{server.server}</option>
-                            ))}
-                        </select>
-                    </div>
-
                     <table className="table">
                     <thead>
                         <tr>
