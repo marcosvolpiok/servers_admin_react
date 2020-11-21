@@ -15,7 +15,7 @@ class Servers extends React.Component {
     render() {
         return (
         <div>
-            {servers.length > 0 &&
+            {this.state.servers.length > 0 &&
                 <select>
                     {this.state.servers.map((server) => (
                         <option key={server.id}>{server.server}</option>
