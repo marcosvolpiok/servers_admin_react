@@ -15,14 +15,15 @@ class Servers extends React.Component {
     render() {
         return (
         <div>
-            <select>
-                {this.state.servers.map((server) => (
-                    <option key={server.id}>{server.server}</option>
-                ))}
-            </select>
+            {servers.length > 0 &&
+                <select>
+                    {this.state.servers.map((server) => (
+                        <option key={server.id}>{server.server}</option>
+                    ))}
+                </select>
+            }
         </div>
         )
-        
       }
 
   }
