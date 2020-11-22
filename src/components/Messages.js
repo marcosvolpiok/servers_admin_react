@@ -6,13 +6,17 @@ class Messages extends React.Component {
         servers: []
     };
 
+
     constructor(props) {
         super(props);
 
-        this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.handleSelectChangeServer = this.handleSelectChangeServer.bind(this);
+        this.handleInputChangeMessage = this.handleInputChangeMessage.bind(this);
+        
+
     }
 
-    async handleSelectChange(event) {
+    async handleSelectChangeServer(event) {
         const target = event.target;
         const value = target.value;
         console.log('value', value);
@@ -20,6 +24,28 @@ class Messages extends React.Component {
         const messagesResponse = await fetch(`http://localhost:4000/messagesByServer/${value}`);
         const messagsJson = await messagesResponse.json();
         this.setState({ messages: messagsJson }); 
+    }
+
+    async handleInputChangeMessage(event) {
+        const target = event.target;
+        const value = target.value;
+
+        const messagesResponse = await fetch(`http://localhost:4000/messageByMessage`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: value
+            }) 
+        });
+        const messagsJson = await messagesResponse.json();
+        this.setState({ messages: messagsJson }); 
+      }
+
+    async handleSubmit(event) {
+        console.log('on submit');
     }
 
 
@@ -38,13 +64,18 @@ class Messages extends React.Component {
         <div>
             {this.state.servers.length > 0 &&
                 <div>
-                    <select onChange={this.handleSelectChange}>
+                    <select onChange={this.handleSelectChangeServer}>
                         {this.state.servers.map((server) => (
                             <option key={server.id} value={server.id}>{server.server}</option>
                         ))}
                     </select>
                 </div>
             }  
+
+            <form onSubmit={this.handleSubmit}>
+                <input type="text" placeholder="Search a menssage" onChange={this.handleInputChangeMessage}></input>
+            </form>
+
 
             {this.state.messages.length > 0 &&
                 <div>
@@ -69,7 +100,7 @@ class Messages extends React.Component {
                 </div>
             }
 
-            {this.state.messages.length == 0 &&
+            {this.state.messages.length === 0 &&
                 <h2>No such any message.</h2>
             }
         </div>
